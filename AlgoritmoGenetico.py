@@ -16,25 +16,27 @@ def inicia_populacao(tamPopulacao, precind):
     return populacao
 
 
-def avaliar(populacao, tamPopulacao, precind):
+def avaliar(populacao, tamPopulacao, precind, precvar):
     fitness = []
     somatotal = 0
 
     for j in range(tamPopulacao):
 
-        cromossomo = ''.join(populacao[j])
-        dec = int(cromossomo, 2)
+        for i in range(0, precind, precvar):
+            individuo = ''.join(populacao[j][i:i + precvar])
 
-        maximo = 5.12
-        minimo = -5.12
+            dec = int(individuo, 2)
 
-        x = minimo+(maximo-minimo)*dec/(2**precind)
-        print('X: {}'.format(x))
+            maximo = 5.12
+            minimo = -5.12
 
-        somatotal = somatotal + (2**x)
-        print('F(x): {}'.format(somatotal))
+            x = minimo+(maximo-minimo)*dec/(2**precind)
+
+            somatotal = somatotal + (2**x)
+            print('F(x): {}'.format(somatotal))
 
         fitness.append(somatotal)
+    print('Fitness: {}'.format(fitness))
 
     return fitness
 
@@ -42,44 +44,45 @@ def avaliar(populacao, tamPopulacao, precind):
 def selecao(fitness, populacao):
     populacaoIntermediaria=[]
     somatotal = sum(fitness)
+    probSelecao = []
+    pacum = []
 
-    for i in range(tamPopulacao):
+    for j in range(0, len(fitness)):
+        probSelecao.append(fitness[j]/somatotal)
+        pacum.append(sum(probSelecao))
+
+    for j in range(tamPopulacao):
+
+        i = 0
+        parcial = 0
         r = uniform(0, somatotal)
-        if (fitness[i] > r):
-            populacaoIntermediaria.append(populacao[i])
+
+        while (i != len(pacum)):
+
+            parcial += pacum[i]
+            i += 1
+            if (parcial >= r):
+                break
+        populacaoIntermediaria.append(populacao[i-1])
 
     print('População Intermediaria: {}'.format(populacaoIntermediaria))
 
     return  populacaoIntermediaria
 
 
-def roda_roleta(fitness, populacao):
-
-    total = sum(fitness)
-    r = uniform(0, total)
-    sorteado = 0
-    for i in range(len(fitness)):
-
-        if (fitness[i] > r):
-
-            sorteado = populacao[i]
-
-    print('Sorteado: {}'.format(sorteado))
-    return  sorteado
-
 
 if __name__ == '__main__':
     precind = 6
     precvar = 2
-#   nfob = 2
+    nfob = 2
     tamPopulacao = int(input('Quantidade "Par" da população: '))
-#   probMutacao = float(input('Probabilidade de mutação: '))
-#   probCrossover = float(input('Probabilidade de crossover: '))
+    probMutacao = float(input('Probabilidade de mutação: '))
+    probCrossover = float(input('Probabilidade de crossover: '))
 
     populacao = inicia_populacao(tamPopulacao, precind)
-    fitness = avaliar(populacao, tamPopulacao, precind)
+    fitness = avaliar(populacao, tamPopulacao, precind, precvar)
 
 #    for j in range(nfob):
     sel = selecao(fitness, populacao)
-    roda_roleta(fitness,sel)
+
 
