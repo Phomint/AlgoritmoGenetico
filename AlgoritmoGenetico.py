@@ -98,6 +98,23 @@ def crossover(populacao, probCrossover):
 
     return filho1, filho2
 
+def mutacao(individuo1, individuo2):
+    r = randint(0,precvar)
+    ra = random()
+
+    if ra <= probMutacao:
+        if (individuo1[r] == 1):
+            individuo1[r]=0
+        elif (individuo1[r] == 0):
+            individuo1[r] = 1
+
+        if (individuo2[r] == 1):
+            individuo2[r]=0
+        elif (individuo2[r] == 0):
+            individuo2[r] = 1
+
+    return individuo1, individuo2
+
 if __name__ == '__main__':
     precind = 6
     precvar = 2
