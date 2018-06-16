@@ -16,7 +16,7 @@ def inicia_populacao(tamPopulacao, precind):
     return populacao
 
 
-def avaliar(populacao, tamPopulacao, precind, precvar):
+def avaliar(populacao,  tamPopulacao, precind, precvar):
     fitness = []
     somatotal = 0
 
@@ -69,7 +69,34 @@ def selecao(fitness, populacao):
 
     return  populacaoIntermediaria
 
+def crossover(populacao, probCrossover):
+    indices = []
+    randoms = []
 
+    for i in range(len(populacao)):
+        randoms.append(random())
+    print('randoms {}'.format(randoms))
+
+    for i , r in enumerate(randoms):
+        if r <= probCrossover:
+            indices.append(i)
+
+    if len(indices)%2!=0:
+        indices.pop()
+    print('Indices {}'.format(indices))
+
+
+    for ind in range(0, len(indices), 2):
+        i = indices[ind]
+        pontoCorte = randint(1, precind)
+        print('Corte em: {}'.format(pontoCorte))
+        print('Pai: {}\nMae: {}'.format(populacao[i], populacao[i+1]))
+
+        filho1 = populacao[i][0:pontoCorte]+populacao[i+1][pontoCorte:]
+        filho2 = populacao[i+1][0:pontoCorte]+populacao[i][pontoCorte:]
+        print('Filho 1: {}\nFilho 2: {}'.format(filho1, filho2))
+
+    return filho1, filho2
 
 if __name__ == '__main__':
     precind = 6
@@ -84,5 +111,5 @@ if __name__ == '__main__':
 
 #    for j in range(nfob):
     sel = selecao(fitness, populacao)
-
+    crossover(sel, probCrossover)
 
