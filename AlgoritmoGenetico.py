@@ -4,7 +4,8 @@ __author__ = 'Patrick Amaral'
 
 def inicia_populacao(tamPopulacao, precind):
     populacao = []
-
+    print('\nPOPULAÇÃO INICIAL')
+    print('-----' * 6)
     for j in range(tamPopulacao):
         linha = []
 
@@ -12,11 +13,13 @@ def inicia_populacao(tamPopulacao, precind):
             linha.append(str(randint(0,1)))
 
         populacao.append(linha)
-        print('População [{}] = {}'.format(j, linha))
+        print('{}'.format(linha))
     return populacao
 
 
 def avaliar(populacao,  tamPopulacao, precind, precvar):
+    print('\nAVALIAÇÃO DA POPULAÇÃO')
+    print('-----' * 6)
     fitness = []
     somatotal = 0
 
@@ -36,13 +39,13 @@ def avaliar(populacao,  tamPopulacao, precind, precvar):
             print('F(x): {}'.format(somatotal))
 
         fitness.append(somatotal)
-    print('Fitness: {}'.format(fitness))
+        print('Fitness: {}'.format(fitness[j]))
 
     return fitness
 
 
-def selecao(fitness, populacao):
-    populacaoIntermediaria=[]
+def selecao(fitness):
+
     somatotal = sum(fitness)
     probSelecao = []
     pacum = []
@@ -50,7 +53,8 @@ def selecao(fitness, populacao):
     for j in range(0, len(fitness)):
         probSelecao.append(fitness[j]/somatotal)
         pacum.append(sum(probSelecao))
-
+    print('\nPOPULAÇÃO SELECIONADA')
+    print('-----'*6)
     for j in range(tamPopulacao):
 
         i = 0
@@ -63,19 +67,19 @@ def selecao(fitness, populacao):
             i += 1
             if (parcial >= r):
                 break
-        populacaoIntermediaria.append(populacao[i-1])
+        populacao.__setitem__(j, populacao[i-1])
+        print('{}'.format(populacao[i-1]))
 
-    print('População Intermediaria: {}'.format(populacaoIntermediaria))
 
-    return  populacaoIntermediaria
 
-def crossover(populacao, probCrossover):
+def crossover(probCrossover):
     indices = []
     randoms = []
 
+    print('\nCROSSOVER')
+    print('-----'*6)
     for i in range(len(populacao)):
         randoms.append(random())
-    print('randoms {}'.format(randoms))
 
     for i , r in enumerate(randoms):
         if r <= probCrossover:
@@ -83,20 +87,18 @@ def crossover(populacao, probCrossover):
 
     if len(indices)%2!=0:
         indices.pop()
-    print('Indices {}'.format(indices))
-
-
+    print('\nINDICES: {}'.format(indices))
     for ind in range(0, len(indices), 2):
-        i = indices[ind]
+
         pontoCorte = randint(1, precind)
         print('Corte em: {}'.format(pontoCorte))
-        print('Pai: {}\nMae: {}'.format(populacao[i], populacao[i+1]))
+        print('Pai: {}\nMae: {}'.format(populacao[indices[ind]], populacao[indices[ind+1]]))
 
-        filho1 = populacao[i][0:pontoCorte]+populacao[i+1][pontoCorte:]
-        filho2 = populacao[i+1][0:pontoCorte]+populacao[i][pontoCorte:]
-        print('Filho 1: {}\nFilho 2: {}'.format(filho1, filho2))
+        populacao.__setitem__(indices[ind],
+                              populacao[indices[ind]][0:pontoCorte]+populacao[indices[ind+1]][pontoCorte:])
+        populacao.__setitem__(indices[ind+1],
+                              populacao[indices[ind+1]][0:pontoCorte]+populacao[indices[ind]][pontoCorte:])
 
-    return filho1, filho2
 
 def mutacao(individuo1, individuo2):
     r = randint(0,precvar)
@@ -127,6 +129,9 @@ if __name__ == '__main__':
     fitness = avaliar(populacao, tamPopulacao, precind, precvar)
 
 #    for j in range(nfob):
-    sel = selecao(fitness, populacao)
-    crossover(sel, probCrossover)
-
+    selecao(fitness)
+    crossover(probCrossover)
+    print('\nPOPULAÇÃO CROSSOVER')
+    print('-----' * 6)
+    for i in range(len(populacao)):
+        print('{}'.format(populacao[i]))
