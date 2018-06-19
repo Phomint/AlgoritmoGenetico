@@ -93,11 +93,11 @@ def crossover(probCrossover):
         pontoCorte = randint(1, precind)
         print('Corte em: {}'.format(pontoCorte))
         print('Pai: {}\nMae: {}'.format(populacao[indices[ind]], populacao[indices[ind+1]]))
+        filho1 = populacao[indices[ind]][0:pontoCorte]+populacao[indices[ind+1]][pontoCorte:]
+        filho2 = populacao[indices[ind+1]][0:pontoCorte]+populacao[indices[ind]][pontoCorte:]
 
-        populacao.__setitem__(indices[ind],
-                              populacao[indices[ind]][0:pontoCorte]+populacao[indices[ind+1]][pontoCorte:])
-        populacao.__setitem__(indices[ind+1],
-                              populacao[indices[ind+1]][0:pontoCorte]+populacao[indices[ind]][pontoCorte:])
+        populacao.__setitem__(indices[ind], filho1)
+        populacao.__setitem__(indices[ind+1], filho2)
 
 
 def mutacao(individuo1, individuo2):
