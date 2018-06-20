@@ -100,27 +100,23 @@ def crossover(probCrossover):
         populacao.__setitem__(indices[ind+1], filho2)
 
 
-def mutacao(individuo1, individuo2):
-    r = randint(0,precvar)
-    ra = random()
+def mutacao(probMutacao):
+    for j in range(len(populacao)):
+        for i in range(len(populacao[j])):
 
-    if ra <= probMutacao:
-        if (individuo1[r] == 1):
-            individuo1[r]=0
-        elif (individuo1[r] == 0):
-            individuo1[r] = 1
+            ra = random()
+            if ra <= probMutacao:
 
-        if (individuo2[r] == 1):
-            individuo2[r]=0
-        elif (individuo2[r] == 0):
-            individuo2[r] = 1
-
-    return individuo1, individuo2
+                if (populacao[j][i] == '1'):
+                     populacao[j].__setitem__(i, '0')
+                elif (populacao[j][i] == '0'):
+                     populacao[j].__setitem__(i, '1')
 
 if __name__ == '__main__':
     precind = 6
     precvar = 2
-    nfob = 2
+    nfob = 10
+
     tamPopulacao = int(input('Quantidade "Par" da população: '))
     probMutacao = float(input('Probabilidade de mutação: '))
     probCrossover = float(input('Probabilidade de crossover: '))
@@ -128,10 +124,16 @@ if __name__ == '__main__':
     populacao = inicia_populacao(tamPopulacao, precind)
     fitness = avaliar(populacao, tamPopulacao, precind, precvar)
 
-#    for j in range(nfob):
-    selecao(fitness)
-    crossover(probCrossover)
-    print('\nPOPULAÇÃO CROSSOVER')
-    print('-----' * 6)
-    for i in range(len(populacao)):
-        print('{}'.format(populacao[i]))
+    for j in range(nfob):
+        selecao(fitness)
+        crossover(probCrossover)
+        print('\nPOPULAÇÃO CROSSOVER')
+        print('-----' * 6)
+        for i in range(len(populacao)):
+            print('{}'.format(populacao[i]))
+        mutacao(probMutacao)
+        print('\nPOPULAÇÃO MUTAÇÃO')
+        print('-----' * 6)
+        for i in range(len(populacao)):
+            print('{}'.format(populacao[i]))
+        fitness = avaliar(populacao, tamPopulacao, precind, precvar)
