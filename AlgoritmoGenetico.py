@@ -1,4 +1,6 @@
 from random import *
+import matplotlib.pyplot as plt
+import statistics
 
 __author__ = 'Patrick Amaral'
 
@@ -115,7 +117,7 @@ def mutacao(probMutacao):
 if __name__ == '__main__':
     precind = 6
     precvar = 2
-    nfob = 10
+    nfob = 100
 
     tamPopulacao = int(input('Quantidade "Par" da população: '))
     probMutacao = float(input('Probabilidade de mutação: '))
@@ -123,6 +125,9 @@ if __name__ == '__main__':
 
     populacao = inicia_populacao(tamPopulacao, precind)
     fitness = avaliar(populacao, tamPopulacao, precind, precvar)
+    maximo=[]
+    minimo=[]
+    media=[]
 
     for j in range(nfob):
         selecao(fitness)
@@ -137,3 +142,17 @@ if __name__ == '__main__':
         for i in range(len(populacao)):
             print('{}'.format(populacao[i]))
         fitness = avaliar(populacao, tamPopulacao, precind, precvar)
+        maximo.append(max(fitness))
+        minimo.append(min(fitness))
+        media.append(statistics.mean(fitness))
+
+    plt.title('Gráfico Fitness')
+    plt.ylabel('Fitness')
+    plt.xlabel('Geração')
+    plt.plot(maximo, label="Máximo")
+    plt.plot(media, label="Média")
+    plt.plot(minimo, label="Mínimo")
+    leg = plt.legend(loc='best', ncol=2, mode="expand", shadow=True, fancybox=True)
+
+
+    plt.show()
